@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row>
+        <v-row class="myRow">
             <catalog-component
                 v-for="catalog in $store.getters.getAllCatalogs"
                 :key="catalog.id"
@@ -47,4 +47,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.myRow {
+    margin: 0 auto;
+}
+</style>

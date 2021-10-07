@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row>
+        <v-row class="myRow">
             <product-component
                 v-for="product in $store.getters.getProductsInCategory"
                 :key="product.id"
@@ -17,4 +17,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.myRow {
+    margin: 0 auto;
+}
+</style>

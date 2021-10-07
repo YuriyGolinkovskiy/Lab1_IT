@@ -15,7 +15,7 @@
         </v-carousel>
         <v-container>
             <v-card-title class="justify-center">Акционные товары</v-card-title>
-            <v-row>
+            <v-row class="myRow">
                 <product-component
                     v-for="product in $store.getters.getCurrentCategoryProducts
                         .promotionProducts.products"
@@ -27,7 +27,7 @@
         <v-divider />
         <v-container>
             <v-card-title class="justify-center">Хит продаж</v-card-title>
-            <v-row>
+            <v-row class="myRow">
                 <product-component
                     v-for="product in $store.getters.getCurrentCategoryProducts
                         .topProducts.products"
@@ -39,7 +39,7 @@
         <v-divider />
         <v-container>
             <v-card-title class="justify-center">Лучшая цена</v-card-title>
-            <v-row>
+            <v-row class="myRow">
                 <product-component
                     v-for="product in $store.getters.getCurrentCategoryProducts
                         .bestCostProducts.products"
@@ -90,4 +90,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.myRow {
+    margin: 0 auto;
+}
+</style>
