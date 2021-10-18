@@ -37,11 +37,7 @@ export default {
             'showDialog',
         ]),
         openPhoto() {
-            // this.$emit('openPhoto', this.catalog);
-
-            //this.setCurrentPhoto(this.catalog);
-            //this.showDialog();
-            this.setCurrentProducts(this.catalog.title);
+            this.setCurrentProducts(this.catalog.id);
         },
     },
 };

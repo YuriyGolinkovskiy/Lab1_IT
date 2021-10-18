@@ -21,10 +21,7 @@
                 Adipisci in libero maxime. Numquam, laudantium similique quas
                 dolorem harum ad quidem, ratione amet officia dicta excepturi
                 minima obcaecati vitae, tempore eos. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Voluptatem quasi qui fugiat
-                corporis mollitia! Soluta fuga exercitationem nisi voluptates
-                consequatur, minus repellendus quam commodi, tempora molestias,
-                sequi dolorem porro unde.
+                consectetur adipisicing elit.
             </v-card-text>
 
             <v-divider></v-divider>
@@ -53,5 +50,6 @@ export default {
 <style scoped>
 .v-footer {
     flex-shrink: 0 !important;
+    display: inline;
 }
 </style>

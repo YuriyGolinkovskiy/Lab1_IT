@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getDatabase, ref, onValue } from 'firebase/database';
 
 export default {
     state: {
@@ -165,19 +166,39 @@ export default {
                 products: [],
             },
         ],
+        products: [],
         dialogVisible: false,
         currentPhoto: {},
+        currentCategoryId: 1,
         currentProducts: [],
         currentProduct: {},
         currentProductsCategory: {
-            promotionProducts: { index: [1, 2, 5, 6], products: [] },
-            topProducts: { index: [2, 4, 1], products: [] },
-            bestCostProducts: { index: [3, 9, 8], products: [] },
+            promotionProducts: { index: [1, 6, 3], products: [] },
+            topProducts: { index: [3, 4, 5], products: [] },
+            bestCostProducts: { index: [8, 10, 12], products: [] },
         },
     },
     mutations: {
-        setCatalogs(state, payload) {
-            state.catalogs = payload;
+        setCatalogs(state) {
+            var buff = [];
+            const db = getDatabase();
+            const dbRef = ref(db, '/catalogs');
+
+            onValue(
+                dbRef,
+                (snapshot) => {
+                    snapshot.forEach((childSnapshot) => {
+                        const childKey = childSnapshot.key;
+                        const childData = childSnapshot.val();
+                        childData.id = Number(childKey);
+                        buff.push(childData);
+                    });
+                },
+                {
+                    onlyOnce: true,
+                }
+            );
+            state.catalogs = buff;
         },
         showDialog(state) {
             state.dialogVisible = true;
@@ -188,15 +209,51 @@ export default {
         setCurrentPhoto(state, payload) {
             state.currentPhoto = payload;
         },
-        setCurrentProducts(state, title) {
-            state.catalogs.forEach((element) => {
-                if (element.title == title) {
-                    state.currentProducts = element.products;
+        setCurrentProducts(state, categoryId) {
+            state.currentCategoryId = categoryId;
+            var products = [];
+            const db = getDatabase();
+            const dbRef = ref(db, '/products');
+
+            onValue(
+                dbRef,
+                (snapshot) => {
+                    snapshot.forEach((childSnapshot) => {
+                        const childKey = childSnapshot.key;
+                        const childData = childSnapshot.val();
+                        if (childData.categoryId === categoryId) {
+                            childData.id = Number(childKey);
+                            products.push(childData);
+                        }
+                    });
+                },
+                {
+                    onlyOnce: true,
                 }
-            });
+            );
+            state.currentProducts = products;
         },
-        setCurrentCart(state, payload) {
-            state.currentProducts = payload;
+        setProducts(state) {
+            var products = [];
+            const db = getDatabase();
+            const dbRef = ref(db, '/products');
+            onValue(
+                dbRef,
+                (snapshot) => {
+                    snapshot.forEach((childSnapshot) => {
+                        const childKey = childSnapshot.key;
+                        const childData = childSnapshot.val();
+
+                        childData.id = Number(childKey);
+                        products.push(childData);
+                    });
+                    state.loading = true;
+                },
+                {
+                    onlyOnce: true,
+                }
+            );
+            state.products = products;
         },
         setCurrentProduct(state, id) {
             state.currentProducts.forEach((element) => {
@@ -205,28 +262,29 @@ export default {
                 }
             });
         },
+        setProduct(state, id) {
+            state.products.forEach((element) => {
+                if (element.id == id) {
+                    state.currentProduct = element;
+                }
+            });
+        },
         setCurrentCategoryProducts(state) {
-            let data = [];
             let c1 = [],
                 c2 = [],
                 c3 = [];
-            state.catalogs.forEach((element) => {
-                element.products.forEach((item) => {
-                    data.push(item);
-                });
-            });
 
             state.currentProductsCategory.promotionProducts.index.forEach(
                 (index) => {
-                    c1.push(data[index - 1]);
+                    c1.push(state.products[index - 1]);
                 }
             );
             state.currentProductsCategory.topProducts.index.forEach((index) => {
-                c2.push(data[index - 1]);
+                c2.push(state.products[index - 1]);
             });
             state.currentProductsCategory.bestCostProducts.index.forEach(
                 (index) => {
-                    c3.push(data[index - 1]);
+                    c3.push(state.products[index - 1]);
                 }
             );
             state.currentProductsCategory.promotionProducts.products = c1;
@@ -250,18 +308,11 @@ export default {
         getProductById(state) {
             return state.currentProduct;
         },
+        getCurrentCategoryId(state) {
+            return state.currentCategoryId;
+        },
         getCurrentCategoryProducts(state) {
             return state.currentProductsCategory;
-        },
-        getCurrentAllCategoryProducts(state) {
-            let data = [];
-
-            state.catalogs.forEach((element) => {
-                element.products.forEach((item) => {
-                    data.push(item);
-                });
-            });
-            return data;
         },
     },
     actions: {

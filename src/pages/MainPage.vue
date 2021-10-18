@@ -53,7 +53,7 @@
 
 <script>
 import ProductComponent from '../components/productComponents/ProductComponent.vue';
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
 export default {
     components: { ProductComponent },
     data() {
@@ -75,17 +75,16 @@ export default {
             ],
         };
     },
+    created() {
+        this.setProducts();
+        setTimeout(() => this.setCurrentCategoryProducts(), 1500);
+    },
     methods: {
         ...mapMutations([
+            'setProducts',
             'setCurrentCategoryProducts',
             'getCurrentCategoryProducts',
-            'setCurrentCart',
         ]),
-        ...mapGetters(['getCurrentAllCategoryProducts']),
-    },
-    created() {
-        this.setCurrentCart(this.getCurrentAllCategoryProducts());
-        this.setCurrentCategoryProducts();
     },
 };
 </script>

@@ -1,13 +1,13 @@
 <template>
     <v-container>
         <validation-observer ref="observer" v-slot="{ invalid }">
-            <form @submit.prevent="submit">
+            <form @submit.prevent="sendEmail">
                 <validation-provider
                     v-slot="{ errors }"
-                    name="Name"
                     rules="required|max:20"
                 >
                     <v-text-field
+                        name="name"
                         v-model="name"
                         :counter="20"
                         :error-messages="errors"
@@ -17,7 +17,6 @@
                 </validation-provider>
                 <validation-provider
                     v-slot="{ errors }"
-                    name="phoneNumber"
                     :rules="{
                         required: true,
                         regex:
@@ -25,30 +24,25 @@
                     }"
                 >
                     <v-text-field
+                        name="phoneNumber"
                         v-model="phoneNumber"
                         :error-messages="errors"
                         label="Ваш номер телефона"
                         required
                     ></v-text-field>
                 </validation-provider>
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="email"
-                    rules="required|email"
-                >
+                <validation-provider v-slot="{ errors }" rules="required|email">
                     <v-text-field
+                        name="email"
                         v-model="email"
                         :error-messages="errors"
                         label="Ваш E-mail"
                         required
                     ></v-text-field>
                 </validation-provider>
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="message"
-                    rules="required"
-                >
+                <validation-provider v-slot="{ errors }" rules="required">
                     <v-textarea
+                        name="message"
                         autocomplete="message"
                         v-model="message"
                         :counter="500"
@@ -73,7 +67,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
-
+import emailjs from 'emailjs-com';
 export default {
     components: {
         ValidationProvider,
@@ -87,6 +81,26 @@ export default {
     }),
 
     methods: {
+        sendEmail(e) {
+            this.submit();
+            try {
+                emailjs.sendForm(
+                    'service_rs558z4',
+                    'template_wxnymxj',
+                    e.target,
+                    'user_hQtnN6WQ3lPhssV1YKqHc',
+                    {
+                        name: this.name,
+                        email: this.email,
+                        message: this.message,
+                        phoneNumber: this.phoneNumber,
+                    }
+                );
+            } catch (error) {
+                console.log({ error });
+            }
+            this.clear();
+        },
         submit() {
             this.$refs.observer.validate();
         },

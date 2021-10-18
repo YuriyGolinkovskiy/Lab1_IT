@@ -9,14 +9,24 @@
 <script>
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+
 export default {
     name: 'App',
     components: {
         Navbar,
         Footer,
     },
+    watch: {
+        $route: {
+            immediate: true,
+            handler(to, from) {
+                document.title = to.meta.title || 'My Project';
+            },
+        },
+    },
 };
 </script>
+
 <style>
 .container {
     flex-grow: 1;

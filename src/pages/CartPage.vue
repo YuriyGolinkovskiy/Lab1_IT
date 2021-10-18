@@ -48,14 +48,9 @@ export default {
         },
     },
     methods: {
-        ...mapMutations(['setCurrentCart', 'addToCart', 'removeFromCart']),
-        setCart() {
-            this.setCurrentCart(this.$store.getters.getCart);
-        },
+        ...mapMutations(['addToCart', 'removeFromCart']),
     },
-    created() {
-        this.setCart();
-    },
+    created() {},
 };
 </script>
 

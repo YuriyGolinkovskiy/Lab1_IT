@@ -12,8 +12,16 @@
 
 <script>
 import ProductComponent from '../components/productComponents/ProductComponent.vue';
+import { mapMutations, mapGetters } from 'vuex';
 export default {
     components: { ProductComponent },
+    created() {
+        this.setCurrentProducts(this.getCurrentCategoryId());
+    },
+    methods: {
+        ...mapMutations(['setCurrentProducts']),
+        ...mapGetters(['getCurrentCategoryId']),
+    },
 };
 </script>
 

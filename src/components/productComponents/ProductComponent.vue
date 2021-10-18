@@ -101,9 +101,18 @@ export default {
         },
     },
     methods: {
-        ...mapMutations(['setCurrentProduct', 'addToCart', 'removeFromCart']),
+        ...mapMutations([
+            'setCurrentProduct',
+            'setProduct',
+            'addToCart',
+            'removeFromCart',
+        ]),
         openProduct() {
-            this.setCurrentProduct(this.product.id);
+            if (this.$route.path == '/') {
+                this.setProduct(this.product.id);
+            } else {
+                this.setCurrentProduct(this.product.id);
+            }
         },
     },
 };
