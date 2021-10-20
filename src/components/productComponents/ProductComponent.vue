@@ -21,7 +21,9 @@
                 <v-card-text
                     ><div>Количество: {{ product.quantity }}</div>
                     <div>
-                        Общая стоимость: ${{ product.totalPrice.toFixed(2) }}
+                        Общая стоимость: ${{
+                            Number(product.totalPrice).toFixed(2)
+                        }}
                     </div>
                 </v-card-text>
                 <v-btn
@@ -106,10 +108,13 @@ export default {
             'setProduct',
             'addToCart',
             'removeFromCart',
+            'setCartProduct',
         ]),
         openProduct() {
             if (this.$route.path == '/') {
                 this.setProduct(this.product.id);
+            } else if (this.$route.path == '/cart') {
+                this.setCartProduct(this.product.id);
             } else {
                 this.setCurrentProduct(this.product.id);
             }

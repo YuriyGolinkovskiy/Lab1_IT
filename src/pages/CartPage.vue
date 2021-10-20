@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <div v-if="$store.state.cartModule.cart.length > 0">
+        <div v-if="$store.getters.getCartCount > 0">
             <v-row class="myRow">
                 <product-component
                     v-for="product in $store.getters.getCart"
@@ -41,7 +41,7 @@ export default {
             let total = 0;
 
             for (let item of this.$store.state.cartModule.cart) {
-                total += item.totalPrice;
+                total += Number(item.totalPrice);
             }
 
             return total.toFixed(2);

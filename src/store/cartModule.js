@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import catalogModule from './catalogModule';
 
 export default {
     state: {
@@ -28,6 +29,13 @@ export default {
 
                 state.cart.splice(index, 1);
             }
+        },
+        setCartProduct(state, id) {
+            state.cart.forEach((element) => {
+                if (element.id == id) {
+                    catalogModule.state.currentProduct = element;
+                }
+            });
         },
     },
     getters: {
